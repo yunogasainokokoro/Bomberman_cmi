@@ -1,0 +1,90 @@
+    #include <SFML/Graphics.hpp>
+    #include <SFML/Window.hpp>
+    #include "joueur.h"
+    #include "map.h"
+    #include "menu.h"
+
+    using namespace sf;
+
+    int main()
+    {
+        sf::ContextSettings settings;
+        settings.antialiasingLevel = 16;
+        settings.depthBits = 32;
+        RenderWindow window(VideoMode(800, 900, 32), "Bomberman premium edition");
+        window.setFramerateLimit(60);
+
+/** creation du menu **/
+        menu menu1;
+/**declaration de la map**/
+        carte carte1;
+        carte1.generer_map();
+/**declaration des joueurs**/
+        joueur joueur1(100,100,1);
+        RectangleShape carre(Vector2f(47,47));
+        carre.setPosition(joueur1.getposition());
+        carre.setFillColor(Color(255,75,0));
+
+        joueur joueur2(700,100,2);
+        Vector2f positionj2=joueur2.getposition();
+        RectangleShape carre2(Vector2f(47,47));
+        carre2.setPosition(joueur2.getposition());
+        carre2.setFillColor(Color(0,50,155));
+
+        joueur joueur3(100,700,3);
+        RectangleShape carre3(Vector2f(47,47));
+        carre3.setPosition(joueur3.getposition());
+        carre3.setFillColor(Color(0,155,155));
+
+        joueur joueur4(700,700,4);
+        RectangleShape carre4(Vector2f(47,47));
+        carre4.setPosition(joueur4.getposition());
+        carre4.setFillColor(Color(155,55,155));
+
+        Clock clock;
+        Time time; /** temps ecoule **/
+        while (window.isOpen())
+        {
+            if( menu1.jeu()==false)
+            {
+
+            menu1.afficher_menu(window);
+            //menu1.gerer_menu(window);
+
+            }
+            else if( menu1.jeu()==true)
+            {
+
+                    time=clock.getElapsedTime();
+                    clock.restart();
+                    if (Keyboard::isKeyPressed(Keyboard::Escape))
+                        {
+                            window.close();
+                        }
+
+
+                        joueur1.seDeplacer(time);
+                        joueur2.seDeplacer(time);
+                        joueur3.seDeplacer(time);
+                        joueur4.seDeplacer(time);
+                        carre.setPosition(joueur1.getposition());
+                        //joueur1.positionx+=2;
+                        carre2.setPosition(joueur2.getposition());
+                        carre3.setPosition(joueur3.getposition());
+                        carre4.setPosition(joueur4.getposition());
+
+            window.clear();
+           carte1.affichermap(window);
+            window.draw(carre);
+            window.draw(carre2);
+            window.draw(carre3);
+            window.draw(carre4);
+            joueur1.change_score(window);
+            joueur2.change_score(window);
+            joueur3.change_score(window);
+            joueur4.change_score(window);
+            }
+            window.display();
+        }
+    return 42;
+    }
